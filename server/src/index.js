@@ -1,6 +1,6 @@
+const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const express = require("express");
 const helmet = require("helmet");
 const nocache = require("nocache");
 const { messagesRouter } = require("./messages/messages.router");

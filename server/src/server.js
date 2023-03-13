@@ -1,56 +1,79 @@
 const express = require("express");
 const cors = require("cors");
-const { Configuration, OpenAIApi } = require("openai");
 const dotenv = require("dotenv");
+const helmet = require("helmet");
+const nocache = require("nocache");
+const { Configuration, OpenAIApi } = require("openai");
 const Filter = require("bad-words");
+const { messagesRouter } = require("./messages/messages.router");
 const { rateLimitMiddleware } = require("./middleware/rate-limit.middleware");
-
-const allowedOrigins = [
-  "http://eyucoder.com",
-  "https://chatgpt.eyucoder.com",
-  "http://localhost",
-];
+const { errorHandler } = require("./middleware/error.middleware");
+const { notFoundHandler } = require("./middleware/not-found.middleware");
 
 const filter = new Filter();
 
-// Load environment variables from .env file
-try {
-  dotenv.config();
-} catch (error) {
-  console.error("Error loading environment variables:", error);
-  process.exit(1);
+dotenv.config();
+
+if (!(process.env.PORT && process.env.CLIENT_ORIGIN_URL)) {
+  throw new Error(
+    "Missing required environment variables. Check docs for more info."
+  );
 }
 
-// Create OpenAI configuration
+const PORT = parseInt(process.env.PORT, 10);
+const CLIENT_ORIGIN_URL = process.env.CLIENT_ORIGIN_URL;
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Create OpenAI API client
 const openai = new OpenAIApi(configuration);
 
-// Create Express app
 const app = express();
+const apiRouter = express.Router();
 
-// Parse JSON in request body
 app.use(express.json());
+app.set("json spaces", 2);
 
-// Enable CORS
-app.use(cors());
+app.use(
+  helmet({
+    hsts: {
+      maxAge: 31536000,
+    },
+    contentSecurityPolicy: {
+      useDefaults: false,
+      directives: {
+        "default-src": ["'none'"],
+        "frame-ancestors": ["'none'"],
+      },
+    },
+    frameguard: {
+      action: "deny",
+    },
+  })
+);
+
+app.use((req, res, next) => {
+  res.contentType("application/json; charset=utf-8");
+  next();
+});
+app.use(nocache());
+
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN_URL,
+    methods: ["GET, POST"],
+    allowedHeaders: ["Authorization", "Content-Type"],
+    maxAge: 86400,
+  })
+);
+
+app.use("/", apiRouter);
+apiRouter.use("/messages", messagesRouter);
 
 // ratelimiter middleware function
 app.use("/davinci", rateLimitMiddleware);
 app.use("/dalle", rateLimitMiddleware);
-
-/**
- * GET /
- * Returns a simple message.
- */
-app.get("/", (req, res) => {
-  res.status(200).send({
-    message: "Hello World!",
-  });
-});
 
 /**
  * POST /davinci
@@ -108,17 +131,12 @@ app.post("/davinci", async (req, res) => {
   }
 });
 
-/**
- * POST /dalle
- * Returns a response from OpenAI's image generation model.
- */
 app.post("/dalle", async (req, res) => {
   const { prompt, user } = req.body;
 
   try {
     const response = await openai.createImage({
       prompt: `${prompt}`,
-      // user: user,
       n: 1,
       size: "256x256",
     });
@@ -129,7 +147,6 @@ app.post("/dalle", async (req, res) => {
       limit: res.body.limit,
     });
   } catch (error) {
-    // Log error and return a generic error message
     console.error(error);
     res.status(500).send({
       error: "Something went wrong",
@@ -137,6 +154,10 @@ app.post("/dalle", async (req, res) => {
   }
 });
 
+app.use(errorHandler);
+app.use(notFoundHandler);
+
 // Start server
-const port = process.env.PORT || 3001;
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});
