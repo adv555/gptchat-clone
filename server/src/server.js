@@ -9,6 +9,7 @@ const { messagesRouter } = require("./messages/messages.router");
 const { rateLimitMiddleware } = require("./middleware/rate-limit.middleware");
 const { errorHandler } = require("./middleware/error.middleware");
 const { notFoundHandler } = require("./middleware/not-found.middleware");
+const { openai } = require("./config/ai-config");
 
 const filter = new Filter();
 
@@ -23,12 +24,15 @@ if (!(process.env.PORT && process.env.CLIENT_ORIGIN_URL)) {
 const PORT = parseInt(process.env.PORT, 10);
 const CLIENT_ORIGIN_URL = process.env.CLIENT_ORIGIN_URL;
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Create OpenAI configuration
+// const configuration = new Configuration({
+//   apiKey: process.env.OPENAI_API_KEY,
+// });
 
-const openai = new OpenAIApi(configuration);
+// Create OpenAI API client
+// const openai = new OpenAIApi(configuration);
 
+// Create Express app
 const app = express();
 const apiRouter = express.Router();
 
@@ -131,12 +135,17 @@ app.post("/davinci", async (req, res) => {
   }
 });
 
+/**
+ * POST /dalle
+ * Returns a response from OpenAI's image generation model.
+ */
 app.post("/dalle", async (req, res) => {
   const { prompt, user } = req.body;
 
   try {
     const response = await openai.createImage({
       prompt: `${prompt}`,
+      // user: user,
       n: 1,
       size: "256x256",
     });
@@ -147,6 +156,7 @@ app.post("/dalle", async (req, res) => {
       limit: res.body.limit,
     });
   } catch (error) {
+    // Log error and return a generic error message
     console.error(error);
     res.status(500).send({
       error: "Something went wrong",

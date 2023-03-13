@@ -6,7 +6,6 @@ const nocache = require("nocache");
 const { messagesRouter } = require("./messages/messages.router");
 const { errorHandler } = require("./middleware/error.middleware");
 const { notFoundHandler } = require("./middleware/not-found.middleware");
-// const { rateLimitMiddleware } = require("./middleware/rate-limit.middleware");
 
 dotenv.config();
 
@@ -60,10 +59,6 @@ app.use(
 
 app.use("/api", apiRouter);
 apiRouter.use("/messages", messagesRouter);
-
-// ratelimiter middleware function
-// app.use("/davinci", rateLimitMiddleware);
-// app.use("/dalle", rateLimitMiddleware);
 
 app.use(errorHandler);
 app.use(notFoundHandler);
