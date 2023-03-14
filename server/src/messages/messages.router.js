@@ -40,60 +40,70 @@ messagesRouter.get(
   }
 );
 
-messagesRouter.post("/davinci", rateLimitMiddleware, async (req, res) => {
-  // Validate request body
-  if (!req.body.prompt) {
-    return res.status(400).send({
-      message: "Missing required field 'prompt' in request body",
-    });
-  }
+messagesRouter.post(
+  "/davinci",
+  validateAccessToken,
+  rateLimitMiddleware,
+  async (req, res) => {
+    // Validate request body
+    if (!req.body.prompt) {
+      return res.status(400).send({
+        message: "Missing required field 'prompt' in request body",
+      });
+    }
 
-  try {
-    // Call OpenAI API
+    const limit = res.body.limit;
+
+    try {
+      // Call OpenAI API
+      const { prompt, user } = req.body;
+
+      const cleanPrompt = filter.isProfane(prompt)
+        ? filter.clean(prompt)
+        : prompt;
+      console.log(cleanPrompt);
+
+      const response = await getDavinciMessage(cleanPrompt, user);
+
+      console.log(response.data.choices[0].message.content);
+
+      // Return response from OpenAI API
+      res.status(200).send({
+        bot: response.data.choices[0].message.content,
+        limit: res.body.limit,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
+        error: "Something went wrong",
+      });
+    }
+  }
+);
+
+messagesRouter.post(
+  "/dalle",
+  validateAccessToken,
+  rateLimitMiddleware,
+  async (req, res) => {
     const { prompt, user } = req.body;
-    console.log("2", prompt, user);
 
-    const cleanPrompt = filter.isProfane(prompt)
-      ? filter.clean(prompt)
-      : prompt;
-    console.log(cleanPrompt);
+    try {
+      const response = await getDalleMessage(prompt);
 
-    const response = await getDavinciMessage(cleanPrompt, user);
+      console.log(response.data.data[0].url);
 
-    console.log(response.data.choices[0].message.content);
-
-    // Return response from OpenAI API
-    res.status(200).send({
-      bot: response.data.choices[0].message.content,
-      limit: res.body.limit,
-    });
-  } catch (error) {
-    // Log error and return a generic error message
-    console.error(error);
-    res.status(500).send({
-      error: "Something went wrong",
-    });
+      res.status(200).send({
+        bot: response.data.data[0].url,
+        limit: res.body.limit,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
+        error: "Something went wrong",
+      });
+    }
   }
-});
-
-messagesRouter.post("/dalle", rateLimitMiddleware, async (req, res) => {
-  const { prompt, user } = req.body;
-
-  try {
-    const response = await getDalleMessage(prompt);
-
-    console.log(response.data.data[0].url);
-
-    res.status(200).send({
-      bot: response.data.data[0].url,
-      limit: res.body.limit,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      error: "Something went wrong",
-    });
-  }
-});
+);
 
 module.exports = { messagesRouter };

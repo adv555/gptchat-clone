@@ -1,11 +1,11 @@
 {
-  "name": "api_express_javascript_hello-world",
+  "name": "server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "a ChatGPT clone using OpenAIs AI Model",
+  "main": "server.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "nodemon src/server.js",
+    "server": "nodemon src/server.js"
   },
   "keywords": [],
   "author": "",

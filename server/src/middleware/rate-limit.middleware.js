@@ -1,15 +1,7 @@
 const Redis = require("ioredis");
 const dotenv = require("dotenv");
 
-// Load environment variables from .env file
-try {
-  dotenv.config();
-} catch (error) {
-  console.error("Error loading environment variables:", error);
-  process.exit(1);
-}
-
-console.log(process.env.REDIS_URL);
+dotenv.config();
 
 const client = new Redis({
   host: process.env.REDIS_URL,
@@ -35,23 +27,18 @@ const rateLimitMiddleware = (req, res, next) => {
 
   // Check the request count for the user address
   client.get(user, (err, count) => {
-    console.log("User: ", user);
-    // const testuser = 1;
-
     if (err) {
       console.error(err);
       return res.status(500).send("Error checking rate limit");
     }
 
     // Calculate the rate usage left
-    // const rateUsageLeft = rateLimit - parseInt(count, 10);
+
     const rateUsageLeft = rateLimit - (count ? parseInt(count, 10) : 0);
 
     // Set the rate usage left in the response body
     res.body = {};
     res.body.limit = rateUsageLeft - 1;
-
-    console.log("rateUsageLeft", rateUsageLeft);
 
     // If the request count is above the rate limit, return an error
     if (count && rateUsageLeft <= 0) {
