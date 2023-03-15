@@ -1,9 +1,8 @@
-// @ts-nocheck
 import React, { useContext } from "react";
 import NavLink from "./NavLink";
-import { DiscordIcon, ExternalLinkIcon, PlusIcon } from "assets/icons";
-import { LogoutButton, ThemeToggleButton } from "components/buttons";
-import { ChatContext } from "context/chatContext";
+import { DiscordIcon, ExternalLinkIcon, PlusIcon } from "../../assets/icons";
+import { LogoutButton, ThemeToggleButton } from "../buttons";
+import { ChatContext } from "../../context/chatContext";
 
 const menu = [
   { to: "#", icon: <DiscordIcon />, text: "OpenAI Discord" },

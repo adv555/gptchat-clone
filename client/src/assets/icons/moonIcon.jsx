@@ -1,6 +1,6 @@
 import React from "react";
 
-const MoonIcon = ({ className = "h-6 w-6", strokeWidth = "1.5" }) => {
+export const MoonIcon = ({ className = "h-6 w-6", strokeWidth = "1.5" }) => {
   return (
     <svg
       stroke="currentColor"

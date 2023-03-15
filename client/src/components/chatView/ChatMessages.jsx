@@ -5,7 +5,6 @@ import Thinking from "./Thinking";
 const ChatMessages = ({ messages, thinking, picUrl }) => {
   const messagesEndRef = useRef();
   const scrollToBottom = () => {
-    // @ts-ignore
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 

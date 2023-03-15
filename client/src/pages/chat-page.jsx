@@ -1,6 +1,6 @@
 import React from "react";
-import { SideBar } from "components/sideBar";
-import ChatView from "components/chat/ChatView";
+import { SideBar } from "./../components/sideBar";
+import { ChatView } from "./../components/chatView";
 
 const ChatPage = () => {
   return (

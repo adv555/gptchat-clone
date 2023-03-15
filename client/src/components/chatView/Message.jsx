@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -6,7 +5,7 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 import moment from "moment";
 import Image from "./Image.jsx";
-import AiIcon from "assets/icons/aiIcon.js";
+import { AiIcon } from "../../assets/icons";
 
 const Message = ({ message, picUrl }) => {
   const { id, createdAt, text, ai = false, selected } = message;

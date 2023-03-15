@@ -1,6 +1,6 @@
 import React from "react";
-import { LogoIcon } from "assets/icons";
-import { LoginButton, SignUpButton } from "components/buttons";
+import { LogoIcon } from "../assets/icons";
+import { LoginButton, SignUpButton } from "../components/buttons";
 
 const AuthPage = () => {
   return (

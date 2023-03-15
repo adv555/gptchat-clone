@@ -1,5 +1,5 @@
 import React from "react";
-import { MenuIcon, PlusIcon } from "assets/icons";
+import { MenuIcon, PlusIcon } from "../../assets/icons";
 
 const MobileMenu = ({ show, setShow }) => {
   return (

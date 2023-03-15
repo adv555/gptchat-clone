@@ -1,5 +1,5 @@
 import React from "react";
-import { AiIcon } from "assets/icons";
+import { AiIcon } from "../../assets/icons";
 
 const Thinking = () => {
   return (

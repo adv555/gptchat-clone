@@ -1,6 +1,6 @@
 import React from "react";
-import useDarkMode from "hooks/useDarkMode";
-import { MoonIcon, SunIcon } from "assets/icons";
+import useDarkMode from "../../hooks/useDarkMode";
+import { MoonIcon, SunIcon } from "../../assets/icons";
 
 const ThemeToggleButton = () => {
   const [darkTheme, setDarkTheme] = useDarkMode();

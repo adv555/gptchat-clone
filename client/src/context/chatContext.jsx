@@ -1,5 +1,5 @@
 import React, { createContext, useState, useMemo } from "react";
-import useMessageCollection from "hooks/useMessageCollection";
+import useMessageCollection from "../hooks/useMessageCollection";
 
 /**
  * ChatContext is a context object that is used to share collection of messages

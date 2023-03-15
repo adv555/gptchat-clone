@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React, { useContext, useEffect, useRef, useState } from "react";
-import MainSection from "components/MainSection";
 import { useAuth0 } from "@auth0/auth0-react";
-import { ChatContext } from "context/chatContext.js";
+import { ChatContext } from "../../context/chatContext";
+import MainSection from "../MainSection.jsx";
 import ChatIntro from "./ChatIntro.jsx";
 import ChatMessages from "./ChatMessages.jsx";
 import ChatForm from "./ChatForm.jsx";
-import { sendMessageToBot } from "services/message.service";
+import { sendMessageToBot } from "../../services/message.service";
 
 const ChatView = () => {
   const inputRef = useRef();
