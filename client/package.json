@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "homepage": ".",
+  "homepage": "https://ai-gptchat.vercel.app/",
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^2.0.1",
