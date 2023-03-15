@@ -27,12 +27,6 @@ function App() {
         errorElement={<ErrorPage />}
       />
 
-      <Route
-        path="/chat"
-        element={<AuthenticationGuard component={ChatPage} />}
-        errorElement={<ErrorPage />}
-      />
-
       <Route path="/callback" element={<CallbackPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
