@@ -52,20 +52,16 @@ messagesRouter.post(
       });
     }
 
-    const limit = res.body.limit;
-
     try {
-      // Call OpenAI API
       const { prompt, user } = req.body;
+      console.log("user", user, "limit", res.body.limit, "prompt", prompt);
 
+      // Call OpenAI API
       const cleanPrompt = filter.isProfane(prompt)
         ? filter.clean(prompt)
         : prompt;
-      console.log(cleanPrompt);
 
       const response = await getDavinciMessage(cleanPrompt, user);
-
-      console.log(response.data.choices[0].message.content);
 
       // Return response from OpenAI API
       res.status(200).send({
@@ -87,11 +83,10 @@ messagesRouter.post(
   rateLimitMiddleware,
   async (req, res) => {
     const { prompt, user } = req.body;
+    console.log("user", user, "limit", res.body.limit, "prompt", prompt);
 
     try {
       const response = await getDalleMessage(prompt);
-
-      console.log(response.data.data[0].url);
 
       res.status(200).send({
         bot: response.data.data[0].url,
