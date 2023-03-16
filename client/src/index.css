@@ -91,5 +91,5 @@
 /* Image */
 
 .message__img {
-  @apply mt-2 rounded-lg shadow-lg bg-cover bg-gray-400  duration-300 ease-out;
+  @apply mt-2 min-h-[256px] rounded-lg shadow-lg bg-cover bg-gray-400  duration-300 ease-out;
 }
