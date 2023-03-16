@@ -53,7 +53,7 @@ export const ChatForm = ({
               className="textarea"
             ></textarea>
             <button className="send-button" type="submit" disabled={!formValue}>
-              <SendIcon />
+              <SendIcon className="rotate-90" />
             </button>
           </div>
         </div>
