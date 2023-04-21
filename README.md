@@ -2,7 +2,7 @@
 
     Build AI Chat in ReactJS by using OpenAI api (GPT-3.5, DALL-E)
 
-![Open AI ChatGPT clone](https://res.cloudinary.com/myfinance/image/upload/v1678999771/MyFinance/preview_ai_whorwf.png)
+![Open AI ChatGPT clone](https://res.cloudinary.com/myfinance/image/upload/v1682103156/recognizer/Screenshot_2023-04-21_at_21.50.30_qmboyy.png)
 
 _you can checkout the app [here](https://gptchat-clone.vercel.app)_
 
